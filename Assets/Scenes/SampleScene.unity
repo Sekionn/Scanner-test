@@ -137,7 +137,7 @@ GameObject:
   - component: {fileID: 15552253}
   m_Layer: 5
   m_Name: Tester
-  m_TagString: Untagged
+  m_TagString: EditBarcode
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -321,6 +321,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5e0d4f948d1d754bbe17064c247d0f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scannerbuttonText: {fileID: 402143758}
 --- !u!114 &141711569
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1002,7 +1003,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 885422774}
         m_TargetAssemblyTypeName: BarcodeData, Assembly-CSharp
-        m_MethodName: ShelfOfOrigin
+        m_MethodName: AddNewBarcode
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1338,7 +1339,7 @@ MonoBehaviour:
   dataPage: {fileID: 407476522}
   text: {fileID: 1445069767}
   editPage: {fileID: 811981807}
-  barcodeText: {fileID: 1376933983}
+  barcodeText: {fileID: 15552253}
   tempBarcode: 
 --- !u!4 &885422775
 Transform:
@@ -2455,7 +2456,7 @@ GameObject:
   - component: {fileID: 1947462218}
   m_Layer: 5
   m_Name: Tester
-  m_TagString: Untagged
+  m_TagString: AmountCounted
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

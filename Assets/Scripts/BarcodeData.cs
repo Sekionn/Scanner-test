@@ -12,7 +12,8 @@ public class BarcodeData : MonoBehaviour
     public static BarcodeData Instance { get; private set; }
 
     public int shelfOfOrigin;
-    public GameObject scanner, dataPage, text, editPage, barcodeText;
+    public GameObject scanner, dataPage, text, editPage;
+    public InputField barcodeText;
     public string tempBarcode = "";
 
     private void Awake()
@@ -27,6 +28,13 @@ public class BarcodeData : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        editPage.SetActive(false);
+        scanner.SetActive(false);
+        dataPage.SetActive(true);
+    }
+
     private void Update()
     {
         if (tempBarcode != "")
@@ -37,9 +45,15 @@ public class BarcodeData : MonoBehaviour
         }
     }
 
-    public void AddNewBarcode(string barcode)
+    public void AddNewBarcode()
     {
-        Barcodes.Add(barcode);
+        InputField amountcounted = GameObject.FindGameObjectWithTag("AmountCounted").GetComponent<InputField>();
+        Barcodes.Add(barcodeText.text);
+        AmountCounted.Add(Int32.Parse(amountcounted.text));
+        tempBarcode = "";
+        editPage.SetActive(false);
+        scanner.SetActive(true);
+        dataPage.SetActive(false);
     }
 
     public void ShelfOfOrigin()

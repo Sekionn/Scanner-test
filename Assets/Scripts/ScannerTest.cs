@@ -10,6 +10,7 @@ public class ScannerTest : MonoBehaviour
 {
     IScanner barcodeScanner;
     RawImage viewPort;
+    public Text scannerbuttonText;
 
     private void Awake()
     {
@@ -54,10 +55,21 @@ public class ScannerTest : MonoBehaviour
 
     public void Scan()
     {
-        barcodeScanner.Scan((barType, barValue) =>
+        if (scannerbuttonText.text == "Scan")
+        {
+            scannerbuttonText.text = "Scanning";
+            barcodeScanner.Scan((barType, barValue) =>
+            {
+                barcodeScanner.Stop();
+                scannerbuttonText.text = "Scan";
+                BarcodeData.Instance.tempBarcode = barValue;
+                BarcodeData.Instance.barcodeText.text = barValue;
+            });
+        } else if (scannerbuttonText.text == "Scanning")
         {
             barcodeScanner.Stop();
-            BarcodeData.Instance.tempBarcode = barValue;
-        });
+            scannerbuttonText.text = "Scan";
+        }
+
     }
 }
