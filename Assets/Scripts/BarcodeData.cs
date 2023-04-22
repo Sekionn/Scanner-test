@@ -47,6 +47,7 @@ public class BarcodeData : MonoBehaviour
         shelfOfOrigin = Int32.Parse(text.GetComponent<Text>().text);
         scanner.SetActive(true);
         dataPage.SetActive(false);
+        editPage.SetActive(false);
     }
 
 }
