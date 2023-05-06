@@ -48,8 +48,25 @@ public class BarcodeData : MonoBehaviour
     public void AddNewBarcode()
     {
         InputField amountcounted = GameObject.FindGameObjectWithTag("AmountCounted").GetComponent<InputField>();
-        Barcodes.Add(barcodeText.text);
-        AmountCounted.Add(Int32.Parse(amountcounted.text));
+
+        if (amountcounted.text == "" || barcodeText.text == "")
+        {
+            return;
+        }
+
+        if (Barcodes.Contains(barcodeText.text))
+        {
+            int index = Barcodes.FindIndex(f => f == barcodeText.text);
+            AmountCounted[index] += Int32.Parse(amountcounted.text);
+        }
+        else
+        {
+            Barcodes.Add(barcodeText.text);
+            AmountCounted.Add(Int32.Parse(amountcounted.text));
+        }
+
+        barcodeText.text = "";
+        amountcounted.text = "";
         tempBarcode = "";
         editPage.SetActive(false);
         scanner.SetActive(true);
@@ -62,6 +79,15 @@ public class BarcodeData : MonoBehaviour
         scanner.SetActive(true);
         dataPage.SetActive(false);
         editPage.SetActive(false);
+    }
+
+
+    public void Back()
+    {
+        tempBarcode = "";
+        editPage.SetActive(false);
+        scanner.SetActive(true);
+        dataPage.SetActive(false);
     }
 
 }
