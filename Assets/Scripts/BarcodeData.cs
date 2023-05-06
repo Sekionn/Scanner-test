@@ -1,8 +1,11 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.Http;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 public class BarcodeData : MonoBehaviour
@@ -90,4 +93,20 @@ public class BarcodeData : MonoBehaviour
         dataPage.SetActive(false);
     }
 
+
+    public void SyncBarcodes()
+    {
+        BarcodeDataDTO data = new BarcodeDataDTO();
+        data.Barcodes = Barcodes;
+        data.shelfOfOrigin = shelfOfOrigin;
+        data.AmountCounted = AmountCounted;
+
+        string jsonData = JsonUtility.ToJson(data);
+
+        UnityWebRequest request = new UnityWebRequest("", "POST");
+        request.SetRequestHeader("Content-Type", "application/json");
+        byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(jsonData);
+        request.uploadHandler = (UploadHandler)new UploadHandlerRaw(jsonToSend);
+        request.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
+    }
 }
