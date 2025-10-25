@@ -1,3 +1,4 @@
+using Assets.Scripts.Json_parser;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -93,19 +94,23 @@ public class BarcodeData : MonoBehaviour
     }
 
 
-    public void SyncBarcodes()
+    public async void SyncBarcodes()
     {
-        BarcodeDataDTO data = new BarcodeDataDTO();
-        data.Barcodes = Barcodes;
-        data.shelfOfOrigin = shelfOfOrigin;
-        data.AmountCounted = AmountCounted;
+        BarcodeDataDTO data = new BarcodeDataDTO(Barcodes, AmountCounted, shelfOfOrigin);
 
+        var jsonparser = new JsonParser();
         string jsonData = JsonUtility.ToJson(data);
+        var information = jsonparser.LoadJson();
 
-        UnityWebRequest request = new UnityWebRequest("", "POST");
+
+        UnityWebRequest request = new UnityWebRequest(information.URL+"multiple", "POST");
         request.SetRequestHeader("Content-Type", "application/json");
         byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(jsonData);
         request.uploadHandler = (UploadHandler)new UploadHandlerRaw(jsonToSend);
         request.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
+
+        await request.SendWebRequest();
+
+        var hello = request.result;
     }
 }
