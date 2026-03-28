@@ -1,10 +1,14 @@
 using Assets.Scripts.Json_parser;
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.Android;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
@@ -33,6 +37,18 @@ public class BarcodeData : MonoBehaviour
 
     private void Start()
     {
+#if PLATFORM_ANDROID
+        if (!Permission.HasUserAuthorizedPermission(Permission.Camera))
+        {
+            Permission.RequestUserPermission(Permission.Camera);
+        }
+#elif UNITY_IOS
+        if (!Application.HasUserAuthorization(UserAuthorization.WebCam))
+        {
+            Application.RequestUserAuthorization(UserAuthorization.WebCam);
+        }
+#endif
+
         editPage.SetActive(false);
         scanner.SetActive(false);
         dataPage.SetActive(true);
@@ -94,23 +110,32 @@ public class BarcodeData : MonoBehaviour
     }
 
 
-    public async void SyncBarcodes()
+    public void SyncBarcodes()
     {
         BarcodeDataDTO data = new BarcodeDataDTO(Barcodes, AmountCounted, shelfOfOrigin);
 
         var jsonparser = new JsonParser();
-        string jsonData = JsonUtility.ToJson(data);
+        var yoyoy = JsonConvert.SerializeObject(data);
+        string jsonData = JsonConvert.SerializeObject(data);
         var information = jsonparser.LoadJson();
 
+        StartCoroutine(PostBarcodes(information, jsonData));
+    }
 
-        UnityWebRequest request = new UnityWebRequest(information.URL+"multiple", "POST");
-        request.SetRequestHeader("Content-Type", "application/json");
-        byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(jsonData);
-        request.uploadHandler = (UploadHandler)new UploadHandlerRaw(jsonToSend);
-        request.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
+    public IEnumerator PostBarcodes(Information information, string jsonData)
+    {
+        Debug.LogError(information.URL + "multiple");
 
-        await request.SendWebRequest();
+        using UnityWebRequest www = UnityWebRequest.Post(information.URL + "multiple", jsonData, "application/json");
+        yield return www.SendWebRequest();
 
-        var hello = request.result;
+        if (www.result != UnityWebRequest.Result.Success)
+        {
+            Debug.LogError(www.error);
+        }
+        else
+        {
+            Debug.Log("Form upload complete!");
+        }
     }
 }

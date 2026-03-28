@@ -29,11 +29,6 @@ public class ScannerTest : MonoBehaviour
         {
             // Set Orientation & Texture
             CalculateBackgroundQuad();
-
-            ////// Keep Image Aspect Ratio
-            //var rect = viewPort.GetComponent<RectTransform>();
-            //var newHeight = rect.sizeDelta.x * barcodeScanner.Camera.Height / barcodeScanner.Camera.Width;
-            //rect.sizeDelta = new Vector2(rect.sizeDelta.x, newHeight);
         };
 
         barcodeScanner.StatusChanged += (sender, arg) =>
@@ -86,7 +81,7 @@ public class ScannerTest : MonoBehaviour
 
         float screenRatio = (float)Screen.width / (float)Screen.height;
         float distance = cam.farClipPlane / 2f;
-        float frustumHeight = .0041f * distance * Mathf.Tan(cam.fieldOfView * 0.5f * Mathf.Deg2Rad);
+        float frustumHeight = .0048f * distance * Mathf.Tan(cam.fieldOfView * 0.5f * Mathf.Deg2Rad);
 
         viewPort.transform.localRotation = baseRotation * Quaternion.AngleAxis(-webCamTexture.videoRotationAngle, Vector3.forward);
 

@@ -1,7 +1,9 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using UnityEngine;
 
 namespace Assets.Scripts.Json_parser
 {
@@ -9,21 +11,19 @@ namespace Assets.Scripts.Json_parser
     {
         public Information LoadJson()
         {
-            
-            using (StreamReader r = new StreamReader(
+            var jsonfile = Resources.Load<TextAsset>(
 #if DEBUG
-            "dev.info.json"
+            "Text/dev.info"
+#elif DEVELOPMENT_BUILD
+                "Text/info"
 #else
-                "info.json"
+                "Text/info"
 #endif
-            ))
-            {
-                string json = r.ReadToEnd();
-                Information items = JsonConvert.DeserializeObject<Information>(json);
+            );
+            
+            Information items = JsonConvert.DeserializeObject<Information>(jsonfile.text);
 
-                return items;
-            }
-
+            return items;
         }
     }
 
